@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#Name: run
+#desc: compiles and execute a C program
+#author: Jscriptural
+#github: https://github.com/jscriptural
+#email: isonguyojohndeveloper@gmail.com
+
+#program to execute
+
+if ! [ -e gcc ]; then
+  $((pkg install gcc ))
+fi
+
+
+if [ ${#@} -ge 1 ]; then
+  program=$1
+  output=${program%.*}
+else
+  echo "No program to run" >&2;
+  exit 1
+fi
+
+echo $program;
+echo -e "output: $output \n"
+
+function usage {
+  cat <<- EOF
+  USAGE:\n
+   run FILE;\n
+   FILE must have extension .c \n
+EOF
+  return 0;
+}
+
+
+
+if [[ "$program" =~ \.(c|cpp|cxx|for|java|cc|f)$ ]]; then
+  if  gcc "$program" -o ${output}; then
+    ./$output;
+  else
+    echo "error occured while compiling" >&2;
+    exit 1
+  fi
+else 
+  echo -e $(usage) >&2;
+  
+  exit 1
+fi
+
+
+
